@@ -41,7 +41,7 @@ def _report_startup_failure(message: str) -> None:
         from tkinter import messagebox  # noqa: PLC0415 - optional on headless hosts
 
         messagebox.showerror("CommendBot Panel", message)
-    except Exception:  # noqa: BLE001 - no display is fine, stderr already has it
+    except Exception:
         pass
 
 

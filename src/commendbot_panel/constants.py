@@ -66,7 +66,7 @@ CONNECTED_MESSAGE = "Connected to "
 
 STATUS_WAITING_CONNECT = "w8connect"
 STATUS_CONFIRMED = "confirmed"
-STATUS_STOPPED = "stoped"  # noqa: S105 - historical DB value, not a password
+STATUS_STOPPED = "stoped"
 STATUS_DONE = "done"
 STATUS_ERROR = "error"
 

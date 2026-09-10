@@ -21,6 +21,7 @@ What changed from the original:
 
 from __future__ import annotations
 
+import contextlib
 import datetime as dt
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -36,7 +37,7 @@ class DatabaseError(RuntimeError):
 
 def utc_now() -> dt.datetime:
     """Current UTC time. One place to patch in tests."""
-    return dt.datetime.now(dt.timezone.utc)
+    return dt.datetime.now(dt.UTC)
 
 
 @dataclass(frozen=True)
@@ -119,9 +120,7 @@ class Database:
 
     def find_user(self, login: str, password: str) -> dict[str, Any] | None:
         """Look up a panel account. Returns ``None`` when the pair is unknown."""
-        return self.users.find_one(
-            {"login": login.strip(), "password": password.strip()}
-        )
+        return self.users.find_one({"login": login.strip(), "password": password.strip()})
 
     def bind_machine(self, user_id: Any, hwid: str) -> None:
         """Record which machine an account is tied to, on first login."""
@@ -259,7 +258,7 @@ class Database:
 
     def log_error(self, hwid: str, message: str, version: str) -> None:
         """Best-effort crash report. Never raises: it runs from error handlers."""
-        try:
+        with contextlib.suppress(Exception):
             self.errors.insert_one(
                 {
                     "hwid": hwid,
@@ -268,8 +267,6 @@ class Database:
                     "datetime": utc_now(),
                 }
             )
-        except Exception:  # noqa: BLE001 - reporting must not mask the real error
-            pass
 
 
 def _slot_from_document(doc: dict[str, Any]) -> Slot:

@@ -26,11 +26,16 @@ def test_load_settings_raises_without_a_mongo_uri(tmp_path):
 
 def test_load_settings_treats_a_blank_mongo_uri_as_missing(tmp_path):
     with pytest.raises(ConfigError):
-        load_settings(store=JsonSettingsStore(tmp_path / "settings.json"), environ={ENV_MONGO_URI: "   "})
+        load_settings(
+            store=JsonSettingsStore(tmp_path / "settings.json"),
+            environ={ENV_MONGO_URI: "   "},
+        )
 
 
 def test_load_settings_keeps_the_uri_from_the_environment(tmp_path):
-    settings = load_settings(store=JsonSettingsStore(tmp_path / "settings.json"), environ={ENV_MONGO_URI: URI})
+    settings = load_settings(
+        store=JsonSettingsStore(tmp_path / "settings.json"), environ={ENV_MONGO_URI: URI}
+    )
     assert settings.mongo_uri == URI
 
 
@@ -50,13 +55,18 @@ def test_load_settings_uses_the_ipc_token_from_the_environment(tmp_path):
 
 
 def test_load_settings_has_an_empty_server_pool_without_a_servers_file(tmp_path):
-    settings = load_settings(store=JsonSettingsStore(tmp_path / "settings.json"), environ={ENV_MONGO_URI: URI})
+    settings = load_settings(
+        store=JsonSettingsStore(tmp_path / "settings.json"), environ={ENV_MONGO_URI: URI}
+    )
     assert settings.servers == ()
 
 
 def test_load_settings_loads_the_server_pool_named_by_the_environment(tmp_path):
     pool = tmp_path / "servers.json"
-    pool.write_text(json.dumps([{"name": "One", "host": "a.example", "port": 27015}]), encoding="utf-8")
+    pool.write_text(
+        json.dumps([{"name": "One", "host": "a.example", "port": 27015}]),
+        encoding="utf-8",
+    )
     settings = load_settings(
         store=JsonSettingsStore(tmp_path / "settings.json"),
         environ={ENV_MONGO_URI: URI, ENV_SERVERS_FILE: str(pool)},
@@ -73,7 +83,9 @@ def test_load_settings_takes_the_user_settings_from_the_store(tmp_path):
 
 
 def test_with_user_returns_a_copy_and_leaves_the_original_alone(tmp_path):
-    settings = load_settings(store=JsonSettingsStore(tmp_path / "settings.json"), environ={ENV_MONGO_URI: URI})
+    settings = load_settings(
+        store=JsonSettingsStore(tmp_path / "settings.json"), environ={ENV_MONGO_URI: URI}
+    )
     updated = settings.with_user(UserSettings(remembered_login="bot_two"))
     assert updated.user.remembered_login == "bot_two"
     assert settings.user.remembered_login == ""
@@ -143,4 +155,7 @@ def test_paths_are_valid_only_when_both_directories_exist(tmp_path):
     assert UserSettings().paths_are_valid is False
     assert UserSettings(steam_path=tmp_path).paths_are_valid is False
     assert UserSettings(steam_path=tmp_path, csgo_path=tmp_path).paths_are_valid is True
-    assert UserSettings(steam_path=tmp_path, csgo_path=tmp_path / "gone").paths_are_valid is False
+    assert (
+        UserSettings(steam_path=tmp_path, csgo_path=tmp_path / "gone").paths_are_valid
+        is False
+    )

@@ -40,7 +40,10 @@ def test_an_accepted_decision_describes_as_empty_text():
 
 
 def test_a_disabled_slot_is_refused():
-    assert validate_order(order(enabled=False), RICH, active_jobs=0).rejection is Rejection.SLOT_DISABLED
+    assert (
+        validate_order(order(enabled=False), RICH, active_jobs=0).rejection
+        is Rejection.SLOT_DISABLED
+    )
 
 
 # A5 — the old message named min_commends while the check compared against 0.
@@ -55,7 +58,10 @@ def test_validate_order_accepts_exactly_the_slot_minimum():
 
 
 def test_zero_commends_is_below_the_minimum_even_when_the_slot_sets_none():
-    assert validate_order(order(amount=0), RICH, active_jobs=0).rejection is Rejection.BELOW_MINIMUM
+    assert (
+        validate_order(order(amount=0), RICH, active_jobs=0).rejection
+        is Rejection.BELOW_MINIMUM
+    )
 
 
 def test_an_amount_above_the_slot_maximum_is_refused():
@@ -68,17 +74,28 @@ def test_a_zero_maximum_means_unlimited():
 
 
 def test_an_order_larger_than_the_slot_currency_is_refused():
-    assert validate_order(order(amount=50, currency=10), RICH, active_jobs=0).rejection is Rejection.SLOT_EXHAUSTED
+    assert (
+        validate_order(order(amount=50, currency=10), RICH, active_jobs=0).rejection
+        is Rejection.SLOT_EXHAUSTED
+    )
 
 
 def test_the_daily_cap_counts_what_was_already_used_today():
-    decision = validate_order(order(amount=10, max_daily_commends=25), Balance(1000, today_used=20), active_jobs=0)
+    decision = validate_order(
+        order(amount=10, max_daily_commends=25),
+        Balance(1000, today_used=20),
+        active_jobs=0,
+    )
     assert decision.rejection is Rejection.DAILY_LIMIT
     assert decision.detail == "5 of 25 left today"
 
 
 def test_a_zero_daily_cap_means_unlimited():
-    assert validate_order(order(amount=10, max_daily_commends=0), Balance(1000, today_used=999), active_jobs=0).accepted
+    assert validate_order(
+        order(amount=10, max_daily_commends=0),
+        Balance(1000, today_used=999),
+        active_jobs=0,
+    ).accepted
 
 
 def test_an_order_larger_than_the_balance_is_refused():
@@ -99,19 +116,25 @@ def test_a_target_that_is_already_running_is_refused():
 
 # A6 — "tdb >= 5 or tdb >= 5 and userid != x" collapsed to one limit for everybody.
 def test_a_reseller_may_exceed_the_reseller_only_threshold():
-    decision = validate_order(order(), RICH, active_jobs=RESELLER_ONLY_JOBS, is_reseller=True)
+    decision = validate_order(
+        order(), RICH, active_jobs=RESELLER_ONLY_JOBS, is_reseller=True
+    )
     assert decision.accepted is True
 
 
 # A6 — but the hard concurrency limit applies to resellers too.
 def test_nobody_may_exceed_the_hard_concurrency_limit():
     for reseller in (False, True):
-        decision = validate_order(order(), RICH, active_jobs=MAX_CONCURRENT_JOBS, is_reseller=reseller)
+        decision = validate_order(
+            order(), RICH, active_jobs=MAX_CONCURRENT_JOBS, is_reseller=reseller
+        )
         assert decision.rejection is Rejection.TOO_MANY_JOBS
 
 
 def test_a_non_reseller_is_refused_at_the_reseller_only_threshold():
-    decision = validate_order(order(), RICH, active_jobs=RESELLER_ONLY_JOBS, is_reseller=False)
+    decision = validate_order(
+        order(), RICH, active_jobs=RESELLER_ONLY_JOBS, is_reseller=False
+    )
     assert decision.rejection is Rejection.RESELLER_ONLY
 
 
@@ -126,7 +149,10 @@ def test_the_cheapest_rule_wins_when_several_would_fail():
 
 def test_describe_appends_the_detail_in_brackets():
     decision = validate_order(order(amount=3, min_commends=5), RICH, active_jobs=0)
-    assert describe(decision) == "That is fewer commends than the slot allows. (minimum is 5)"
+    assert (
+        describe(decision)
+        == "That is fewer commends than the slot allows. (minimum is 5)"
+    )
 
 
 def test_describe_omits_the_brackets_when_there_is_no_detail():
@@ -173,7 +199,7 @@ def test_parse_bulk_file_skips_blank_lines_and_comments():
 
 def test_parse_bulk_file_reports_the_offending_line_number():
     text = "bot_one:pw1:10\n\nbot_two:pw2:lots\n"
-    with pytest.raises(ValueError, match="^line 3: "):
+    with pytest.raises(ValueError, match=r"^line 3: "):
         parse_bulk_file(text)
 
 

@@ -178,7 +178,7 @@ class CommendScreen(Screen):
             return
         try:
             self.slots = database.list_slots()
-        except Exception:  # noqa: BLE001 - a dead cluster leaves the old list up
+        except Exception:
             log.warning("could not read the slot list")
             return
 
@@ -196,7 +196,7 @@ class CommendScreen(Screen):
 
         try:
             jobs = database.list_active_jobs(self.app.hwid)
-        except Exception:  # noqa: BLE001 - keep the last known state on screen
+        except Exception:
             return
 
         ids = [str(job.steam_id64) for job in jobs]
@@ -255,8 +255,8 @@ class CommendScreen(Screen):
 
         import datetime as dt  # noqa: PLC0415 - only needed on this path
 
-        end = dt.datetime.fromtimestamp(job.ends_at, tz=dt.timezone.utc)
-        minutes = (end - dt.datetime.now(dt.timezone.utc)).total_seconds() / 60
+        end = dt.datetime.fromtimestamp(job.ends_at, tz=dt.UTC)
+        minutes = (end - dt.datetime.now(dt.UTC)).total_seconds() / 60
         if minutes <= 0:
             return "0 min"
         return f"{minutes / 60:.1f} hr" if minutes > 60 else f"{int(minutes)} min"
@@ -383,8 +383,9 @@ class CommendScreen(Screen):
             return True
 
         order = Order(steam_id64=steam_id, amount=amount, slot=slot)
-        problem = self._place(order, account=account, password=password,
-                              shared_secret=shared_secret)
+        problem = self._place(
+            order, account=account, password=password, shared_secret=shared_secret
+        )
         if problem:
             self.app.call_on_ui(messagebox.showerror, "Cannot start", problem)
             return True
@@ -437,7 +438,7 @@ class CommendScreen(Screen):
                 slot=order.slot,
                 previous_balance=balance.amount,
             )
-        except Exception as exc:  # noqa: BLE001 - give the budget back on any failure
+        except Exception as exc:
             database.refund_slot_currency(order.slot.id, order.amount)
             log.exception("creating the job failed")
             return f"Could not create the job: {exc}"
@@ -467,7 +468,7 @@ class CommendScreen(Screen):
     # --- the two action buttons ------------------------------------------
 
     def on_stop(self) -> None:
-        """"Confirm" starts a queued job; "Stop" asks the backend to end it."""
+        """ "Confirm" starts a queued job; "Stop" asks the backend to end it."""
         database = self.app.database
         if database is None or self.selected_account is None:
             return
@@ -480,7 +481,7 @@ class CommendScreen(Screen):
         self._set_buttons(stop="Stop", pause="Pause", enabled=False)
 
     def on_pause(self) -> None:
-        """"Cancel" drops the job and refunds it; "Pause" is backend-driven."""
+        """ "Cancel" drops the job and refunds it; "Pause" is backend-driven."""
         database = self.app.database
         if database is None or self.selected_account is None:
             return

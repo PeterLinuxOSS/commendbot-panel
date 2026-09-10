@@ -17,6 +17,7 @@ original:
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import socket
 import threading
@@ -58,10 +59,8 @@ class RunnerConnection:
 
     def close(self) -> None:
         """Close the socket, ignoring the state it happens to be in."""
-        try:
+        with contextlib.suppress(OSError):
             self.socket.close()
-        except OSError:
-            pass
 
 
 # Called for every message from a runner, on that runner's thread.
@@ -120,10 +119,8 @@ class ControlServer:
         """Stop accepting, drop every runner and wait for the thread to finish."""
         self._stopping.set()
         if self._socket is not None:
-            try:
+            with contextlib.suppress(OSError):
                 self._socket.close()
-            except OSError:
-                pass
         with self._lock:
             connections = list(self._connections.values())
             self._connections.clear()
@@ -207,10 +204,8 @@ class ControlServer:
         finally:
             if connection is not None:
                 self._forget(connection)
-            try:
+            with contextlib.suppress(OSError):
                 conn.close()
-            except OSError:
-                pass
 
     def _authenticate(
         self, conn: socket.socket, message: Message
@@ -245,7 +240,7 @@ class ControlServer:
         """Hand a message to the application, never letting it kill the thread."""
         try:
             self._handler(connection, message)
-        except Exception:  # noqa: BLE001 - one bad handler must not drop the runner
+        except Exception:
             log.exception("handler failed for %s", message.verb)
 
     def _forget(self, connection: RunnerConnection) -> None:
@@ -258,7 +253,5 @@ class ControlServer:
 
 def _try_send(conn: socket.socket, verb: str, *args: object) -> None:
     """Send a final message to a peer we are about to drop; failure is fine."""
-    try:
+    with contextlib.suppress(OSError):
         conn.sendall(protocol.encode(verb, *args))
-    except OSError:
-        pass

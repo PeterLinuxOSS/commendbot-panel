@@ -61,12 +61,18 @@ def test_parse_steam_id_uses_the_injected_resolver_for_a_vanity_url():
         seen.append(name)
         return ID64
 
-    assert parse_steam_id("https://steamcommunity.com/id/gaben", resolve_vanity=resolve) == ID64
+    assert (
+        parse_steam_id("https://steamcommunity.com/id/gaben", resolve_vanity=resolve)
+        == ID64
+    )
     assert seen == ["gaben"]
 
 
 def test_parse_steam_id_returns_none_when_the_resolver_finds_nothing():
-    assert parse_steam_id("steamcommunity.com/id/nobody", resolve_vanity=lambda name: None) is None
+    assert (
+        parse_steam_id("steamcommunity.com/id/nobody", resolve_vanity=lambda name: None)
+        is None
+    )
 
 
 def test_parse_steam_id_returns_none_for_junk():

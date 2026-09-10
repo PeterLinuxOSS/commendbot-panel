@@ -92,7 +92,7 @@ class BalanceScreen(Screen):
         user_id = int(self.app.user["userid"])
         try:
             slots = database.list_slots()
-        except Exception:  # noqa: BLE001 - a dead cluster must not kill the screen
+        except Exception:
             self._add_row("Cannot reach the server.")
             return
 

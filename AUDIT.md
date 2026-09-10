@@ -32,7 +32,7 @@ worth doing regardless of open-sourcing.
 
 ### A1. `Auto-Reconnect off` never turns off — `run/main.py:191`
 ```python
-autoreconnect = bool(edata.split("-")[1])   # bool("0") is True
+autoreconnect = bool(edata.split("-")[1])  # bool("0") is True
 ```
 The panel sends `autoreconnect-0` (`main.py:92`, `:1771`), the client reads it as `True`.
 The checkbox has never worked in the "off" direction.

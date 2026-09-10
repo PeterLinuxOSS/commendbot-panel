@@ -24,23 +24,23 @@ from ..constants import IPC_ENCODING, IPC_TERMINATOR
 
 # --- Verbs the panel sends to a runner ------------------------------------
 
-READY = "READY"          # handshake accepted
-DENIED = "DENIED"        # bad token; the runner must exit
-CONNECT = "CONNECT"      # CONNECT <steam://connect/...>
-LAUNCH = "LAUNCH"        # bring CS:GO up via steam://rungameid
-CLOSE = "CLOSE"          # shut the game and the runner down
-RESTART = "RESTART"      # forget "already commending" state
-SETTINGS = "SETTINGS"    # SETTINGS autoreconnect=1
+READY = "READY"  # handshake accepted
+DENIED = "DENIED"  # bad token; the runner must exit
+CONNECT = "CONNECT"  # CONNECT <steam://connect/...>
+LAUNCH = "LAUNCH"  # bring CS:GO up via steam://rungameid
+CLOSE = "CLOSE"  # shut the game and the runner down
+RESTART = "RESTART"  # forget "already commending" state
+SETTINGS = "SETTINGS"  # SETTINGS autoreconnect=1
 CREDENTIALS = "CREDENTIALS"  # CREDENTIALS <account> <password>
-FIND_LOGIN = "FIND_LOGIN"    # locate the Steam Guard window
-TYPE_CODE = "TYPE_CODE"      # TYPE_CODE <5-char guard code>
+FIND_LOGIN = "FIND_LOGIN"  # locate the Steam Guard window
+TYPE_CODE = "TYPE_CODE"  # TYPE_CODE <5-char guard code>
 
 # --- Verbs a runner sends to the panel ------------------------------------
 
-HELLO = "HELLO"                # HELLO <token> <steam_id64>
-STARTED = "STARTED"            # the account is on a server and commending
+HELLO = "HELLO"  # HELLO <token> <steam_id64>
+STARTED = "STARTED"  # the account is on a server and commending
 LOGIN_WINDOW = "LOGIN_WINDOW"  # LOGIN_WINDOW <hwnd>
-BYE = "BYE"                    # clean shutdown
+BYE = "BYE"  # clean shutdown
 
 
 class ProtocolError(ValueError):

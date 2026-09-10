@@ -18,7 +18,12 @@ def test_parse_bool_treats_zero_as_false():
 
 
 def test_parse_bool_accepts_the_spelled_out_negatives():
-    assert [parse_bool(v) for v in ("false", "NO", " off ", "")] == [False, False, False, False]
+    assert [parse_bool(v) for v in ("false", "NO", " off ", "")] == [
+        False,
+        False,
+        False,
+        False,
+    ]
 
 
 def test_parse_bool_treats_any_other_word_as_true():
@@ -72,7 +77,9 @@ def test_flags_reads_key_value_arguments_and_ignores_the_rest():
 def test_message_reader_reassembles_a_message_split_across_two_chunks():
     reader = MessageReader()
     assert reader.feed(b"HELLO tok 7656") == []
-    assert [m.args for m in reader.feed(b"1198012345678\n")] == [("tok", "76561198012345678")]
+    assert [m.args for m in reader.feed(b"1198012345678\n")] == [
+        ("tok", "76561198012345678")
+    ]
 
 
 # A20 — two messages arriving in one read must not be treated as one blob.

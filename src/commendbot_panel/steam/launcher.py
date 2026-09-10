@@ -117,9 +117,7 @@ def spawn(
     and quietly loses the rest as soon as a path contains a space
     (AUDIT.md B2).
     """
-    return subprocess.Popen(  # noqa: S603
-        command, creationflags=creationflags, env=env
-    )
+    return subprocess.Popen(command, creationflags=creationflags, env=env)
 
 
 def copy_tree(source: Path, target: Path) -> int:

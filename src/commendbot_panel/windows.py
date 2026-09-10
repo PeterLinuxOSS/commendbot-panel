@@ -43,7 +43,7 @@ def machine_id() -> str:
     for source in (_machine_guid_from_registry, _machine_uuid_from_powershell):
         try:
             value = source()
-        except Exception:  # noqa: BLE001 - any failure just moves to the next source
+        except Exception:
             value = None
         if value:
             return value
@@ -174,7 +174,7 @@ def bring_to_front(hwnd: int) -> tuple[int, int, int, int]:
         win32gui.SetForegroundWindow(hwnd)
         rect = win32gui.GetClientRect(hwnd)
         left, top = win32gui.ClientToScreen(hwnd, (rect[0], rect[1]))
-    except Exception as exc:  # noqa: BLE001 - pywin32 raises bare pywintypes.error
+    except Exception as exc:
         raise ForegroundError(f"window {hwnd} is no longer usable") from exc
 
     return (left, top, left + rect[2] - rect[0], top + rect[3] - rect[1])

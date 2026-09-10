@@ -15,6 +15,7 @@ import os
 import sys
 import threading
 import traceback
+from dataclasses import replace
 from pathlib import Path
 from tkinter import messagebox
 from typing import Any
@@ -22,8 +23,6 @@ from typing import Any
 import customtkinter as ctk
 
 from .. import __version__
-from dataclasses import replace
-
 from ..config import (
     ENV_IPC_TOKEN,
     Settings,
@@ -148,9 +147,7 @@ class PanelApp(ctk.CTk):
 
     def remember_login(self, login: str) -> None:
         """Store the login name so the next start pre-fills it."""
-        self.update_user_settings(
-            replace(self.settings.user, remembered_login=login)
-        )
+        self.update_user_settings(replace(self.settings.user, remembered_login=login))
 
     def _on_signed_in(self, user: dict[str, Any]) -> None:
         """Build the panel proper once the credentials check out."""
@@ -171,8 +168,13 @@ class PanelApp(ctk.CTk):
         logo = self.assets.icon("logo.png", 40)
         if logo:
             ctk.CTkButton(
-                rail, text="", image=logo, fg_color="transparent", hover=False,
-                width=40, height=40,
+                rail,
+                text="",
+                image=logo,
+                fg_color="transparent",
+                hover=False,
+                width=40,
+                height=40,
             ).pack(pady=(10, 20))
 
         self.screens = {
@@ -376,7 +378,7 @@ class PanelApp(ctk.CTk):
                     self._handle_change(change)
             except DatabaseError as exc:
                 log.warning("change stream unavailable: %s", exc)
-            except Exception:  # noqa: BLE001 - a dropped cursor is routine
+            except Exception:
                 log.info("change stream dropped, reopening")
 
             # Wait before reopening, and stop entirely once we are shutting down.
@@ -403,9 +405,7 @@ class PanelApp(ctk.CTk):
         elif status == STATUS_DONE:
             received = document.get("actualamount", 0)
             total = document.get("amount", 0)
-            self.call_on_ui(
-                self._log_activity, f"{steam_id} finished {received}/{total}"
-            )
+            self.call_on_ui(self._log_activity, f"{steam_id} finished {received}/{total}")
             self.call_on_ui(self._run_end_task, steam_id)
 
         self.call_on_ui(self._refresh_current_screen)
@@ -416,7 +416,7 @@ class PanelApp(ctk.CTk):
         if choice == "Turn off PC":
             import os  # noqa: PLC0415 - only needed on this path
 
-            os.system("shutdown /s /t 60")  # noqa: S605 - a minute to cancel it
+            os.system("shutdown /s /t 60")
         elif choice in ("Close CS:GO", "Close Panel & CS:GO"):
             self.control_server.send_to(steam_id64, protocol.CLOSE)
             if choice == "Close Panel & CS:GO" and not self.control_server.steam_ids:
@@ -444,9 +444,7 @@ class PanelApp(ctk.CTk):
 
     def report_callback_exception(self, exc_type, exc_value, exc_traceback) -> None:
         """Tk calls this for any exception raised inside a callback."""
-        message = "".join(
-            traceback.format_exception(exc_type, exc_value, exc_traceback)
-        )
+        message = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
         log.error("unhandled UI error\n%s", message)
         messagebox.showerror("Error", message)
         if self.database is not None:

@@ -9,6 +9,7 @@ whose panel had exited retried forever (AUDIT.md A3). The budget is now spent by
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import socket
 import time
@@ -101,10 +102,8 @@ class ControlClient:
     def close(self) -> None:
         """Drop the connection; safe to call more than once."""
         if self._socket is not None:
-            try:
+            with contextlib.suppress(OSError):
                 self._socket.close()
-            except OSError:
-                pass
             self._socket = None
 
     # --- messaging --------------------------------------------------------

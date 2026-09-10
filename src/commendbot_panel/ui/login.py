@@ -54,9 +54,7 @@ class LoginWindow(ctk.CTkToplevel):
         self.login_entry.pack(pady=10, padx=12)
         self.login_entry.insert(0, app.settings.user.remembered_login)
 
-        self.password_entry = ctk.CTkEntry(
-            frame, placeholder_text="Password", show="*"
-        )
+        self.password_entry = ctk.CTkEntry(frame, placeholder_text="Password", show="*")
         self.password_entry.pack(pady=5, padx=6)
         self.password_entry.bind("<Return>", lambda _event: self.submit())
 

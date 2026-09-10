@@ -68,7 +68,9 @@ def test_parse_login_users_skips_a_non_numeric_key():
 
 
 def test_find_steam_id_by_account_ignores_case_and_surrounding_space():
-    assert find_steam_id_by_account(LOGINUSERS_VDF, "  COMMENDBOT_TWO ") == 76561198087654321
+    assert (
+        find_steam_id_by_account(LOGINUSERS_VDF, "  COMMENDBOT_TWO ") == 76561198087654321
+    )
 
 
 def test_find_steam_id_by_account_returns_none_for_an_unknown_account():

@@ -178,13 +178,16 @@ class SettingsScreen(Screen):
     def _sync_switches(self) -> None:
         """Reflect the stored values and gate Auto-Start on Auto-Reconnect."""
         user = self.app.settings.user
-        (self._auto_reconnect.select if user.auto_reconnect else self._auto_reconnect.deselect)()
-        (self._auto_start.select if user.auto_start else self._auto_start.deselect)()
-        self._auto_start.configure(
-            state="normal" if user.auto_reconnect else "disabled"
-        )
+        _set_checkbox(self._auto_reconnect, user.auto_reconnect)
+        _set_checkbox(self._auto_start, user.auto_start)
+        self._auto_start.configure(state="normal" if user.auto_reconnect else "disabled")
 
     def _update(self, **changes) -> None:
         """Write one or more fields through to the app and the settings store."""
         updated: UserSettings = replace(self.app.settings.user, **changes)
         self.app.update_user_settings(updated)
+
+
+def _set_checkbox(box: ctk.CTkCheckBox, checked: bool) -> None:
+    """Tick or untick without firing the widget's command."""
+    box.select() if checked else box.deselect()

@@ -59,7 +59,9 @@ line-length = 90
 target-version = "py311"
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+# PLC0415 is on because imports inside functions are deliberate here — the
+# optional and platform-specific ones — and each is marked with a noqa saying so.
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF", "PLC0415"]
 
 [tool.ruff.lint.per-file-ignores]
 # Tests may shadow builtins and keep long literal fixtures on one line.

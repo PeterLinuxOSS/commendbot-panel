@@ -139,9 +139,7 @@ def validate_order(
         return Decision(Rejection.DAILY_LIMIT, f"{remaining} of {daily_cap} left today")
 
     if order.amount > balance.amount:
-        return Decision(
-            Rejection.INSUFFICIENT_BALANCE, f"{balance.amount} commends left"
-        )
+        return Decision(Rejection.INSUFFICIENT_BALANCE, f"{balance.amount} commends left")
 
     if target_blacklisted:
         return Decision(Rejection.TARGET_BLACKLISTED)

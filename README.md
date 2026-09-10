@@ -14,6 +14,12 @@ the original and what was changed.
 > Automating commends is against the Steam Subscriber Agreement. Running this
 > risks the accounts involved. It is here as a record of a finished project.
 
+## Demo
+
+A walkthrough of the panel in use, recorded while CS:GO was still the live game:
+
+[![CommendBot Panel — overview](https://img.youtube.com/vi/eW5n4UGVCA8/maxresdefault.jpg)](https://youtu.be/eW5n4UGVCA8)
+
 ---
 
 ## What is in the box

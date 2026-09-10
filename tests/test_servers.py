@@ -49,7 +49,11 @@ def test_pick_best_server_returns_none_for_an_empty_pool():
 
 
 def test_pick_best_server_picks_the_lowest_occupancy():
-    loads = {BUSY: ServerLoad(18, 20), QUIET: ServerLoad(2, 20), BROKEN: ServerLoad(10, 20)}
+    loads = {
+        BUSY: ServerLoad(18, 20),
+        QUIET: ServerLoad(2, 20),
+        BROKEN: ServerLoad(10, 20),
+    }
     assert pick_best_server([BUSY, QUIET, BROKEN], loads.get) is QUIET
 
 
@@ -62,7 +66,12 @@ def test_pick_best_server_treats_a_zero_slot_server_as_full():
     loads = {BUSY: ServerLoad(0, 0), QUIET: ServerLoad(20, 20)}
     # both are at occupancy 1.0, so the first one sampled wins and neither is preferred over a real answer
     assert pick_best_server([BUSY, QUIET], loads.get) is BUSY
-    assert pick_best_server([BUSY, QUIET], {BUSY: ServerLoad(0, 0), QUIET: ServerLoad(19, 20)}.get) is QUIET
+    assert (
+        pick_best_server(
+            [BUSY, QUIET], {BUSY: ServerLoad(0, 0), QUIET: ServerLoad(19, 20)}.get
+        )
+        is QUIET
+    )
 
 
 def test_pick_best_server_returns_a_full_server_rather_than_nothing():

@@ -137,9 +137,7 @@ class JsonSettingsStore(SettingsStore):
 
     def save(self, settings: UserSettings) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
-        self.path.write_text(
-            json.dumps(to_mapping(settings), indent=2), encoding="utf-8"
-        )
+        self.path.write_text(json.dumps(to_mapping(settings), indent=2), encoding="utf-8")
 
 
 def to_mapping(settings: UserSettings) -> dict[str, object]:

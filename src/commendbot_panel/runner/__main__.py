@@ -283,7 +283,7 @@ def _query_server(server: GameServer) -> ServerLoad | None:
 
     try:
         info = a2s.info(server.address, timeout=5)
-    except Exception:  # noqa: BLE001 - any network failure means "no answer"
+    except Exception:
         return None
     return ServerLoad(players=info.player_count, slots=info.max_players)
 
