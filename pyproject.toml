@@ -1,17 +1,69 @@
 [build-system]
-requires = ["setuptools>=68"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "commendbot-panel"
-version = "3.0.0"
-description = "Desktop controller for CS:GO commend jobs."
+dynamic = ["version"]
+description = "Desktop controller for CS:GO commend jobs (archive release)."
 readme = "README.md"
-requires-python = ">=3.10"
-license = { file = "LICENSE" }
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Peter Rigo" }]
+keywords = ["csgo", "steam", "customtkinter", "desktop"]
+classifiers = [
+    "Development Status :: 7 - Inactive",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment :: First Person Shooters",
+]
 
-[tool.setuptools.packages.find]
-where = ["src"]
+dependencies = [
+    "customtkinter>=5.2",
+    "pillow>=10.0",
+    "pymongo>=4.6",
+    "python-a2s>=1.3",
+    "vdf>=3.4",
+    "psutil>=5.9",
+    "pyperclip>=1.8",
+    "pyautogui>=0.9.54",
+    "tzlocal>=5.0",
+    "steam>=1.4",
+    # Windows-only: the registry store and the window handles.
+    "pywin32>=306; sys_platform == 'win32'",
+    "regobj>=0.2; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.urls]
+Homepage = "https://github.com/PeterLinuxOSS/commendbot-panel"
+Issues = "https://github.com/PeterLinuxOSS/commendbot-panel/issues"
+
+[project.scripts]
+commendbot-panel = "commendbot_panel.__main__:main"
+commendbot-runner = "commendbot_panel.runner.__main__:main"
+
+[tool.hatch.version]
+path = "src/commendbot_panel/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/commendbot_panel"]
+
+[tool.ruff]
+line-length = 90
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests may shadow builtins and keep long literal fixtures on one line.
+"tests/*" = ["E501", "A002"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
