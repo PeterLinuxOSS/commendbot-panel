@@ -2,7 +2,12 @@
 
 A Windows desktop controller that drove CS:GO commend jobs: it signed Steam
 accounts in, kept their game clients on a set of community servers, and tracked
-progress against a shared MongoDB that a Discord bot also wrote to.
+progress against the same MongoDB the rest of the service used.
+
+It was the operator-facing half of a paid commend service run under the **r4p
+Services** brand (gameboosting.top) from November 2019 to January 2025. The
+service has been retired; this repository is an archive, published for
+reference. All credentials have been removed and rotated.
 
 **This is an archive release.** CS:GO was replaced by Counter-Strike 2 in
 September 2023. The runner works by patching `csgo/gameinfo.txt` and tailing
@@ -13,6 +18,24 @@ the original and what was changed.
 
 > Automating commends is against the Steam Subscriber Agreement. Running this
 > risks the accounts involved. It is here as a record of a finished project.
+
+## Where this fits
+
+Four repositories, one retired service. They talk to each other exclusively
+through MongoDB collections — one component records a request, another acts on
+it and writes progress back.
+
+| repository | role |
+|---|---|
+| [commendbot](https://github.com/PeterLinuxOSS/commendbot) | Discord bot: the management and commerce layer — balances, tickets, resellers |
+| [commendbot-slots](https://github.com/PeterLinuxOSS/commendbot-slots) | the worker processes that actually delivered the commends |
+| **commendbot-panel** (this repo) | the desktop client an operator ran on the machine hosting the game clients |
+| [shopmanager](https://github.com/PeterLinuxOSS/shopmanager) | the storefront bot that sold the commends in the first place |
+
+The panel writes to `serverusers` and `waitinglist` and reads `commendbotstatus`,
+`balancesdb`, `usersdb` and `blacklistdb`; `commendbot` is the other end of every
+one of those. Neither repository ships the database, so each is readable on its
+own but neither runs alone.
 
 ## Demo
 
@@ -51,8 +74,9 @@ no database, which is what makes the test-suite possible.
 * Python 3.11+.
 * A MongoDB deployment with the collections the panel expects (`usersdb`,
   `balancesdb`, `commendbotstatus`, `serverusers`, `waitinglist`, `blacklistdb`,
-  `errors`). **The backend that creates and consumes those documents is not part
-  of this repository**, so a fresh clone has a client with nothing to talk to.
+  `errors`). Those documents are created and consumed by
+  [commendbot](https://github.com/PeterLinuxOSS/commendbot) — without it running
+  against the same database, a fresh clone is a client with nothing to talk to.
 
 ## Setup
 

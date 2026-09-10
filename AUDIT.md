@@ -193,6 +193,8 @@ the identification handshake, so this is reachable, not theoretical.
   apply to CS2. The panel cannot be made to work again without rewriting the client.
 - The panel is a thin client over a MongoDB that also backs a Discord bot (collections
   `guildsetting`, `privatechannels`, `commendbotstatus`, `sub`, `keysdb`, ...). That backend
-  is **not** in this source tree, so a published repo is not self-contained.
+  is not in *this* source tree — it is
+  [commendbot](https://github.com/PeterLinuxOSS/commendbot), archived separately — so this
+  repository is readable on its own but not runnable on its own.
 - Windows-only by construction: `regobj`, `win32gui`, `wmic`, `pyautogui` screen matching,
   `steam.exe`.

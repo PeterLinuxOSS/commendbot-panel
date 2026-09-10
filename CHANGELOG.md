@@ -86,6 +86,6 @@ without changing what the program is meant to do. Audit ids in brackets refer to
 
 * CS:GO only; CS2 is not supported and would need the runner rewritten.
 * Windows only for real use.
-* The MongoDB backend and the Discord bot that share the database are not part
-  of this repository.
+* The panel is one of four components and does not run alone; the other end of
+  its database is [commendbot](https://github.com/PeterLinuxOSS/commendbot).
 * The original icon assets are not redistributed.
