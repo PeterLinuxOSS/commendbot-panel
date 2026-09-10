@@ -1,0 +1,44 @@
+# --- Python ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# --- Virtual environments ---------------------------------------------------
+.venv/
+venv/
+env/
+ENV/
+
+# --- Build artefacts --------------------------------------------------------
+build/
+dist/
+*.egg-info/
+.eggs/
+*.spec
+
+# --- Tool caches ------------------------------------------------------------
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.tox/
+
+# --- Editors and IDEs -------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# --- OS files ---------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Local configuration and data (never commit) ----------------------------
+.env
+servers.json
+*.log
+_import/

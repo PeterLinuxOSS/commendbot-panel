@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Example EU #1",
+    "host": "eu1.servers.example.com",
+    "port": 27015,
+    "password": "changeme"
+  },
+  {
+    "name": "Example EU #2",
+    "host": "eu2.servers.example.com",
+    "port": 27016,
+    "password": "changeme"
+  },
+  {
+    "name": "Example NA #1",
+    "host": "na1.servers.example.com",
+    "port": 27015,
+    "password": "changeme"
+  }
+]
