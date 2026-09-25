@@ -1,16 +1,16 @@
 # commendbot-panel
 
-Serverový ovládací panel systému **CommendBot**. Riadi klientske agenty (`commendbot-client`), dispečuje im úlohy a spúšťa ich automaticky (aj skompilovaný `client.exe`).
+Server-side control panel for the **CommendBot** system. It manages the client agents (`commendbot-client`), dispatches tasks to them and launches them automatically (including the compiled `client.exe`).
 
-## Súčasti
-- panel backend + UI
-- komunikácia s klientmi cez socket
+## Overview
+- Panel backend + UI
+- Socket-based communication with clients
 
-## Rodina CommendBot
-- **commendbot** — jadro bota (commend logika)
-- **commendbot-panel** — serverový ovládací panel (spúšťa a riadi klientov)
-- **commendbot-client** — klientský agent bežiaci na stroji (ovláda Steam/CS2)
-- **commendbot-slots** — slotový systém inštancií
-- **shopmanager** — predajný/objednávkový Discord bot (kľúče, licencie)
+## CommendBot family
+- **commendbot** — core bot (commend logic)
+- **commendbot-panel** — server-side control panel (dispatches & manages clients)
+- **commendbot-client** — client agent running on the machine (drives Steam/CS2)
+- **commendbot-slots** — slot-based instance manager
+- **shopmanager** — Discord sales/order bot (keys, licenses)
 
-_Súčasť ekosystému služby gameboosting._
+_Part of the gameboosting service ecosystem._
